@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magic Typing Game</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Magic Typing Game by <a href="https://github.com/Roobbeet" target="_blank">Roobbeet</a></h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="monsterHealthStyle">{{monsterHealth}}</div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div class="healthbar__value" :style="userHealthStyle">{{userHealth}}</div>
+        </div>
+      </section>
+      <!-- Spell Controls -->
+      <section v-if="!spellChant" id="controls">
+        <button @click="userChooseAttack()">Fire Attack</button>
+        <button :disabled="!specialAttackReady" @click="userSpecialAttack()" :class="specialAttackStyle">Stone Storm</button>
+        <!-- disabled adalah basic html buat bikin button gabisa dipencet -->
+        <button @click="userChooseHeal()">Water Bender</button>
+        <button @click="userSurrender()">SURRENDER</button>
+      </section>
+
+      <div class="chant-container">
+        <div v-if="spellChant">
+          <h2>{{chantChallenge}} </h2>
+        <h3 v-if="spellTimer > 0" :class="timerFunction">Time Left: {{userTimer}} seconds</h3>
+        </div>
+        <div class="user-chant">
+          <input @keyup.enter="userInputChant" @keyup="keydownChant"  type="text" ref="spellInput" v-model="currentChant" >
+          <h4>Press enter to submit chant</h4>
+          <!-- :disabled="!spellChant" -->
+        </div>
+      </div>
+      
+      
+      
+      <button class="tutorial-btn"@click="toggleTutorial">{{showTutorial ? 'Hide' : 'Show'}} Tutorial</button>
+
+      <section v-show="showTutorial" class="tutorial">
+        <ol>
+          <li>This is a testing game, I am so sorry for the broken UI/mechs</li>
+          <li>You given some seconds to write up the spell, known as CHANTING</li>
+          <li>CHANT is case sensitive, so yeah...</li>
+          <li>CHANT will not written if you type the wrong key</li>
+          <li>PRESS ENTER AFTER YOU COMPLETE THE CHANT!</li>
+          <li>Fire attack is basic attack</li>
+          <li>Stone Storm is stun based attack, the chance to stun the enemy is 20% (pretty big right)</li>
+          <li>Water bender is healing spell, but the monster will still attack you afterwards (lol)</li>
+          <li>Don't surrender, pls</li>
+        </ol>
+      </section>
+
+      <section id="log" class="container">
+        <h2>Battle Log</h2>
+        <ul v-if="battleLog.length > 0">
+          <li v-for="(items, index) in battleLog">{{items}}</li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
